@@ -20,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -34,7 +35,8 @@ public class MainScreen extends AppCompatActivity {
     private static String videos_playlist_url = "https://www.googleapis.com/youtube/v3/playlistItems";
 
     ArrayList<PlaylistInfo> playlists;
-    ArrayList<ExercisesList> exercises;
+//    ArrayList<ExercisesList> exercises;
+    HashMap<String, ArrayList<ExerciseInfo>> exercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +76,13 @@ public class MainScreen extends AppCompatActivity {
         }
     }
 
-    public class RequestVideoPlaylistAPI extends AsyncTask<URL, Void, JSONObject> {
+    public class RequestVideoPlaylistAPI extends AsyncTask<Params, Void, JSONObject> {
         @Override
-        protected JSONObject doInBackground(URL... urls) {
+        protected JSONObject doInBackground(Params... params) {
+            Params currParam = params[0];
             HttpURLConnection urlConnection = null;
             try {
-                urlConnection = (HttpURLConnection) urls[0].openConnection();
+                urlConnection = (HttpURLConnection) currParam.url.openConnection();
                 InputStream in = urlConnection.getInputStream();
                 Scanner scanner = new Scanner(in);
                 scanner.useDelimiter("\\A");
@@ -87,7 +90,9 @@ public class MainScreen extends AppCompatActivity {
                 boolean hasInput = scanner.hasNext();
                 if (hasInput) {
                     String x = scanner.next();
-                    return new JSONObject(x);
+                    JSONObject tempJsonObject = new JSONObject(x);
+                    tempJsonObject.put("playlistId", currParam.playlistId);
+                    return tempJsonObject;
                 } else {
                     return null;
                 }
@@ -106,14 +111,24 @@ public class MainScreen extends AppCompatActivity {
         protected void onPostExecute(JSONObject jsonObject) {
             try {
                 if(exercises==null)
-                    exercises = new ArrayList<ExercisesList>();
+                    exercises = new HashMap<>();
+                String playlistId = jsonObject.getString("playlistId");
+                jsonObject.remove("playlistId");
                 ArrayList<ExerciseInfo> currExercises = ConvertJson.toVideosPlaylist(jsonObject);
-                exercises.add(new ExercisesList(currExercises));
+                if(!exercises.containsKey(playlistId)){
+                    exercises.put(playlistId, currExercises);
+                }else{
+                    ArrayList<ExerciseInfo> newExercises = exercises.get(playlistId);
+                    for(ExerciseInfo e:currExercises)
+                        newExercises.add(e);
+                    exercises.put(playlistId, newExercises);
+                }
+
 
                     if (exercises.size()==playlists.size()){
                         Intent intent = new Intent(MainScreen.this, MainActivity.class);
                         intent.putParcelableArrayListExtra("chapters", playlists);
-                        intent.putParcelableArrayListExtra("exercises", exercises);
+                        intent.putExtra("exercises", exercises);
                         startActivity(intent);
                     }
 
@@ -166,7 +181,8 @@ public class MainScreen extends AppCompatActivity {
                     PlaylistInfo currPlaylist = playlists.get(i);
                     try {
                         URL finalUrl = getVideoPlaylistJsonData(currPlaylist.getPlaylistId());
-                        new RequestVideoPlaylistAPI().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, finalUrl);
+                        Params params = new Params(finalUrl, currPlaylist.getPlaylistId());
+                        new RequestVideoPlaylistAPI().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
 
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
@@ -178,5 +194,15 @@ public class MainScreen extends AppCompatActivity {
             }
         }
 
+    }
+
+    private class Params{
+        URL url;
+        String playlistId;
+
+        public Params(URL url, String playlistId){
+            this.url = url;
+            this.playlistId = playlistId;
+        }
     }
 }

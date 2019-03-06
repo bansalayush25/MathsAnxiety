@@ -11,16 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mathsanxiety.Fragments.ChapterPagerAdapter;
+import com.example.mathsanxiety.Models.ExerciseInfo;
 import com.example.mathsanxiety.Models.ExercisesList;
 import com.example.mathsanxiety.Models.PlaylistInfo;
 import com.example.mathsanxiety.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ChaptersPager extends Fragment {
 
     ArrayList<PlaylistInfo> chapters;
-    ArrayList<ExercisesList> exercises;
+//    ArrayList<ExercisesList> exercises;
+    HashMap<String, ArrayList<ExerciseInfo>> exercises;
     View rootView;
     TabLayout chaptersTab;
     ViewPager chaptersPager;
@@ -31,7 +34,7 @@ public class ChaptersPager extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         chapters = getArguments().getParcelableArrayList("chapters");
-        exercises = getArguments().getParcelableArrayList("exercises");
+        exercises = (HashMap<String, ArrayList<ExerciseInfo>>) getArguments().getSerializable("exercises");
         rootView = inflater.inflate(R.layout.chapters_tab, container, false);
         chaptersTab = rootView.findViewById(R.id.chaptersTab);
         chaptersPager = rootView.findViewById(R.id.chaptersPager);
@@ -62,7 +65,7 @@ public class ChaptersPager extends Fragment {
         ChapterPagerAdapter chapterPagerAdapter= new ChapterPagerAdapter(getChildFragmentManager());
         for(int i=0; i<chapters.size(); i++){
             Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList("exercise", exercises.get(i).getExerciseList());
+            bundle.putParcelableArrayList("exercise", exercises.get(chapters.get(i).getPlaylistId()));
             fr = new ExercisePager();
             fr.setArguments(bundle);
             chapterPagerAdapter.addFragment(fr, chapters.get(i));

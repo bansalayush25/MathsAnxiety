@@ -37,10 +37,11 @@ public class ConvertJson {
             JSONObject exercise = exercisesPlaylistArray.getJSONObject(i);
             JSONObject snippet = exercise.getJSONObject("snippet");
             String videoId = snippet.getJSONObject("resourceId").getString("videoId");
+            String playlistId = snippet.getString("playlistId");
             String title = snippet.getString("title");
             String description = snippet.getString("description");
             String thumbnail = snippet.getJSONObject("thumbnails").getJSONObject("medium").getString("url");
-            ExerciseInfo currExercise = new ExerciseInfo(Types.EXERCISE_TYPE, videoId, title, description, thumbnail);
+            ExerciseInfo currExercise = new ExerciseInfo(Types.EXERCISE_TYPE, videoId, playlistId, title, description, thumbnail);
             exercisesPlaylist.add(currExercise);
         }
         return exercisesPlaylist;

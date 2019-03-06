@@ -6,13 +6,15 @@ import android.os.Parcelable;
 public class ExerciseInfo implements Parcelable{
     int id;
     String videoId;
+    String playlistId;
     String title;
     String description;
     String thumbnail;
 
-    public ExerciseInfo(int id, String videoId, String title, String description, String thumbnail) {
+    public ExerciseInfo(int id, String videoId, String playlistId, String title, String description, String thumbnail) {
         this.id = id;
         this.videoId = videoId;
+        this.playlistId = playlistId;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
@@ -21,6 +23,7 @@ public class ExerciseInfo implements Parcelable{
     public ExerciseInfo(Parcel parcel) {
         id = parcel.readInt();
         videoId = parcel.readString();
+        playlistId = parcel.readString();
         title = parcel.readString();
         description = parcel.readString();
         thumbnail = parcel.readString();
@@ -88,6 +91,7 @@ public class ExerciseInfo implements Parcelable{
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(videoId);
+        parcel.writeString(playlistId);
         parcel.writeString(title);
         parcel.writeString(description);
         parcel.writeString(thumbnail);

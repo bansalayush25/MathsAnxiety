@@ -23,6 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -33,18 +34,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     ArrayList<PlaylistInfo> chapters;
-    ArrayList<ExercisesList> exercises;
+    HashMap<String, ArrayList<ExerciseInfo>> exercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         chapters = getIntent().getParcelableArrayListExtra("chapters");
-        exercises = getIntent().getParcelableArrayListExtra("exercises");
+        exercises = (HashMap<String, ArrayList<ExerciseInfo>>) getIntent().getSerializableExtra("exercises");
         ChaptersPager fragment = new ChaptersPager();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("chapters", chapters);
-        bundle.putParcelableArrayList("exercises", exercises);
+        bundle.putSerializable("exercises", exercises);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.parentLayout, fragment, ChaptersPager.class.getSimpleName()).commit();
 
