@@ -3,7 +3,7 @@ package com.example.mathsanxiety.Models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class ExerciseInfo{
+public class ExerciseInfo implements Parcelable{
     int id;
     String videoId;
     String title;
@@ -18,6 +18,13 @@ public class ExerciseInfo{
         this.thumbnail = thumbnail;
     }
 
+    public ExerciseInfo(Parcel parcel) {
+        id = parcel.readInt();
+        videoId = parcel.readString();
+        title = parcel.readString();
+        description = parcel.readString();
+        thumbnail = parcel.readString();
+    }
 
 
     public int getId() {
@@ -58,5 +65,31 @@ public class ExerciseInfo{
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public static final Creator<ExerciseInfo>CREATOR = new Creator<ExerciseInfo>() {
+        @Override
+        public ExerciseInfo createFromParcel(Parcel parcel) {
+            return new ExerciseInfo(parcel);
+        }
+
+        @Override
+        public ExerciseInfo[] newArray(int size) {
+            return new ExerciseInfo[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(videoId);
+        parcel.writeString(title);
+        parcel.writeString(description);
+        parcel.writeString(thumbnail);
     }
 }

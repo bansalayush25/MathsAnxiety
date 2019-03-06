@@ -16,21 +16,19 @@ import com.example.mathsanxiety.Fragments.TabFragment;
 import com.example.mathsanxiety.Models.ExerciseInfo;
 import com.example.mathsanxiety.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ExercisePager extends Fragment {
     View rootView;
     TabLayout exerciseTab;
     ViewPager exercisePager;
-    List<ExerciseInfo> exercises;
+    ArrayList<ExerciseInfo> exercise;
     Fragment fr = null;
-
-    String[] titles = {"12", "34", "53", "65"};
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("Exercise", "onCreateView: ");
+        exercise = getArguments().getParcelableArrayList("exercise");
         rootView = inflater.inflate(R.layout.exercise_tab, container, false);
         exerciseTab = rootView.findViewById(R.id.exerciseTab);
         exercisePager = rootView.findViewById(R.id.exercisePager);
@@ -62,11 +60,10 @@ public class ExercisePager extends Fragment {
     }
 
     public void setupExercisePager(ViewPager viewPager){
-        Log.d("Exercise", "setupExercisePager: ");
         ExercisePagerAdapter adapter = new ExercisePagerAdapter(getChildFragmentManager());
-        for(int i=0; i<titles.length; i++){
+        for(int i=0; i<exercise.size(); i++){
             fr = new TabFragment();
-            adapter.addFragment(fr, titles[i]);
+            adapter.addFragment(fr, exercise.get(i));
         }
         viewPager.setAdapter(adapter);
     }

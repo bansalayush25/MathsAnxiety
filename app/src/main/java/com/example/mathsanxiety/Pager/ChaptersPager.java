@@ -11,31 +11,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mathsanxiety.Fragments.ChapterPagerAdapter;
-import com.example.mathsanxiety.Fragments.ExercisePagerAdapter;
+import com.example.mathsanxiety.Models.ExercisesList;
 import com.example.mathsanxiety.Models.PlaylistInfo;
 import com.example.mathsanxiety.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ChaptersPager extends Fragment {
 
-    List<PlaylistInfo> chapters;
+    ArrayList<PlaylistInfo> chapters;
+    ArrayList<ExercisesList> exercises;
     View rootView;
     TabLayout chaptersTab;
     ViewPager chaptersPager;
     Fragment fr = null;
 
-    @Override
-    public void setArguments(@Nullable Bundle args) {
-        super.setArguments(args);
-    }
-
-    String[] chapters2 = {"1", "2", "3", "4"};
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        chapters = getArguments().getParcelable("playlist");
+        chapters = getArguments().getParcelableArrayList("chapters");
+        exercises = getArguments().getParcelableArrayList("exercises");
         rootView = inflater.inflate(R.layout.chapters_tab, container, false);
         chaptersTab = rootView.findViewById(R.id.chaptersTab);
         chaptersPager = rootView.findViewById(R.id.chaptersPager);
@@ -64,13 +60,12 @@ public class ChaptersPager extends Fragment {
 
     public void setupChapterViewPager(ViewPager viewPager){
         ChapterPagerAdapter chapterPagerAdapter= new ChapterPagerAdapter(getChildFragmentManager());
-        for(int i=0; i<chapters2.length; i++){
+        for(int i=0; i<chapters.size(); i++){
             Bundle bundle = new Bundle();
-            bundle.putString("title", chapters2[i]);
-//            bundle.putParcelable("chapter_id", chapters.get(i));
+            bundle.putParcelableArrayList("exercise", exercises.get(i).getExerciseList());
             fr = new ExercisePager();
             fr.setArguments(bundle);
-            chapterPagerAdapter.addFragment(fr, chapters2[i]);
+            chapterPagerAdapter.addFragment(fr, chapters.get(i));
         }
         viewPager.setAdapter(chapterPagerAdapter);
     }

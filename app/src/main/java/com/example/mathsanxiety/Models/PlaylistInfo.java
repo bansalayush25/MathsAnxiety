@@ -1,8 +1,9 @@
 package com.example.mathsanxiety.Models;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
-public class PlaylistInfo{
+public class PlaylistInfo implements Parcelable{
     int id;
     String playlistId;
     String title;
@@ -15,6 +16,14 @@ public class PlaylistInfo{
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
+    }
+
+    public PlaylistInfo(Parcel parcel) {
+        id = parcel.readInt();
+        playlistId = parcel.readString();
+        title = parcel.readString();
+        description = parcel.readString();
+        thumbnail = parcel.readString();
     }
 
     public int getId() {
@@ -55,5 +64,31 @@ public class PlaylistInfo{
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public static final Creator<PlaylistInfo>CREATOR = new Creator<PlaylistInfo>() {
+        @Override
+        public PlaylistInfo createFromParcel(Parcel parcel) {
+            return new PlaylistInfo(parcel);
+        }
+
+        @Override
+        public PlaylistInfo[] newArray(int size) {
+            return new PlaylistInfo[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeString(playlistId);
+        parcel.writeString(title);
+        parcel.writeString(description);
+        parcel.writeString(thumbnail);
     }
 }

@@ -4,18 +4,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 import com.example.mathsanxiety.Models.ExerciseInfo;
-import com.example.mathsanxiety.Models.PlaylistInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExercisePagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragmentList = new ArrayList<>();
-    private List<ExerciseInfo> exercises = new ArrayList<>();
-    private List<String> titles = new ArrayList<>();
+    private ArrayList<ExerciseInfo> exercise = new ArrayList<>();
 
     public ExercisePagerAdapter(FragmentManager fm) {
         super(fm);
@@ -28,20 +25,17 @@ public class ExercisePagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return titles.size();
+        return exercise.size();
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        Log.d("ExerciseAdapter", "getPageTitle: ");
-//        return exercises.get(position).getTitle();
-        return titles.get(position);
+        return exercise.get(position).getTitle();
     }
 
-    public void addFragment(Fragment fr, String title){
+    public void addFragment(Fragment fr, ExerciseInfo currExercise){
         fragmentList.add(fr);
-//        exercises.add(exercise);
-        titles.add(title);
+        exercise.add(currExercise);
     }
 }

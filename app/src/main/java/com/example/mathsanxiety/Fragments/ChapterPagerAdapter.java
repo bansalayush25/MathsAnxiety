@@ -1,11 +1,9 @@
 package com.example.mathsanxiety.Fragments;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.ViewGroup;
 
 import com.example.mathsanxiety.Models.PlaylistInfo;
 
@@ -16,7 +14,7 @@ public class ChapterPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragmentList = new ArrayList<>();
     private List<PlaylistInfo> chapters = new ArrayList<>();
-    private List<String> title = new ArrayList<>();
+
     public ChapterPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -28,19 +26,17 @@ public class ChapterPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return title.size();
+        return chapters.size();
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-//        return chapters.get(position).getTitle();
-        return title.get(position);
+        return chapters.get(position).getTitle();
     }
 
-    public void addFragment(Fragment fr, String chapter){
+    public void addFragment(Fragment fr, PlaylistInfo chapter){
         fragmentList.add(fr);
-//        chapters.add(chapter);
-        title.add(chapter);
+        chapters.add(chapter);
     }
 }
