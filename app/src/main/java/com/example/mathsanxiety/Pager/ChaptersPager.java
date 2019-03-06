@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mathsanxiety.Fragments.ChapterPagerAdapter;
+import com.example.mathsanxiety.Fragments.ExercisePagerAdapter;
 import com.example.mathsanxiety.Models.PlaylistInfo;
 import com.example.mathsanxiety.R;
 

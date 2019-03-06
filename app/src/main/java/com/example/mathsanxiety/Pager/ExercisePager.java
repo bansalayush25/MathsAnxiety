@@ -56,6 +56,11 @@ public class ExercisePager extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
     public void setupExercisePager(ViewPager viewPager){
         Log.d("Exercise", "setupExercisePager: ");
         ExercisePagerAdapter adapter = new ExercisePagerAdapter(getChildFragmentManager());
